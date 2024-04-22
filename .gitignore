@@ -21,3 +21,6 @@
 !/refs/*.png
 !/docs/
 !/docs.*Rmd
+
+# Ignore .fastq.gz files in the samples folder
+/samples/*.fastq.gz
