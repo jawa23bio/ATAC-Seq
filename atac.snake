@@ -1,0 +1,48 @@
+REP = ['rep3', 'rep4']
+READ = ['R1', 'R2']
+
+rule all:
+	input:
+		expand('results/ATAC{rep}_R1_P.fq.gz', rep = REP),
+		expand('results/ATAC{rep}_R1_U.fq.gz', rep = REP),
+		expand('results/ATAC{rep}_R2_P.fq.gz', rep = REP),
+		expand('results/ATAC{rep}_R2_U.fq.gz', rep = REP)
+
+rule fastqc:
+	input: 
+		fastq = 'samples/ATAC{rep}_{read}.fastq.gz'
+	output:
+		fastqc = 'results/ATAC{rep}_{read}_fastqc.html'
+	params:
+		outdir = 'results/'
+	threads: 4
+	conda:
+		'envs/fastqc_env.yml'
+	shell:
+		'''
+		fastqc {input.fastq} -o {params.outdir}
+		'''
+
+rule trimomatic:
+	input:
+		r1 = 'samples/ATAC{rep}_R1.fastq.gz',
+		r2 = 'samples/ATAC{rep}_R2.fastq.gz',
+		adapters = 'samples/NexteraPE-PE.fa'
+	output:
+		p1 = 'results/ATAC{rep}_R1_P.fq.gz',
+		u1 = 'results/ATAC{rep}_R1_U.fq.gz',
+		p2 = 'results/ATAC{rep}_R2_P.fq.gz',
+		u2 = 'results/ATAC{rep}_R2_U.fq.gz'
+	threads: 8
+	conda:
+		'envs/trimmomatic_env.yml'
+	shell:
+		'''
+		trimmomatic PE -threads {threads} \
+        {input.r1} {input.r2} \
+        {output.p1} {output.u1} {output.p2} {output.u2} \
+        ILLUMINACLIP:{input.adapters}:2:30:10 \
+        LEADING:3 \
+        TRAILING:3 \
+        SLIDINGWINDOW:4:15
+		'''
