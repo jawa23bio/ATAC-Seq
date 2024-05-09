@@ -110,7 +110,7 @@ rule bowtie2_align:
 		'envs/bowtie2_env.yml'
 	shell:
 		'''
-		bowtie2 -x {params.index} -1 {input.R1P} -2 {input.R2P} -U {input.R1U} {input.R2U} -X | samtools view -bS - > {output}
+		bowtie2 -x {params.index} -1 {input.R1P} -2 {input.R2P} -U {input.R1U} {input.R2U} -X 2000 | samtools view -bS - > {output}
 		'''
 
 rule samtools_sort:
