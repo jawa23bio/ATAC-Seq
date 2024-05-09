@@ -5,9 +5,9 @@ EXTENSIONS = [1, 2, 3, 4, 'rev.1', 'rev.2']
 rule all:
 	input:
 		expand('results/ATAC{rep}_{read}_fastqc.html', rep = REP, read = READ),
+		expand('results/ATAC_{rep}_sorted.rmchrM.bam.bai', rep = REP),
 		expand('results/ATAC_{rep}_sorted_idxstats.txt', rep = REP),
 		expand('results/ATAC_{rep}_sorted_flagstat.txt', rep = REP),
-		expand('results/ATAC_{rep}_sorted.rmchrM.bam.bai', rep = REP),
 		expand('results/ATAC_{rep}_nbr.bw',rep = REP),
 		expand('results/ATAC_{rep}_nfr.bw', rep = REP),
 		'results/ATAC_annotated.txt',
@@ -103,7 +103,7 @@ rule bowtie2_align:
 		R2U = 'results/trimmed/ATAC{rep}_R2_U.fq'
 	output:
 		'results/ATAC_{rep}.bam'
-	threads: 28
+	threads: 16
 	params:
 		index = 'results/index/GRCh38'
 	conda:
@@ -161,6 +161,36 @@ rule rm_chrM:
 		'''
 		samtools view -h {input} | grep -v chrM | samtools sort -O bam -o {output}
 		'''
+
+# Check for duplicates percentage by using the .metrics file
+# rule mark_dup:
+#	input:
+#		'results/ATAC_{rep}_sorted.rmchrM.bam'
+#	output:
+#		'results/ATAC_{rep}_sorted.markdup.bam'
+#	conda:
+#		'envs/picard_env.yml'
+#	threads: 8
+#	params:
+#		'results/ATAC_{rep}_sorted.markdup.metrics'
+#	shell:
+#		'''
+#		picard MarkDuplicates I={input} O={output} M={params} REMOVE_DUPLICATES=false CREATE_INDEX=true
+#		'''
+
+# Remove multimapped, duplicate and unmapped reads
+# rule rm_multimap:
+#	input:
+#		'results/ATAC_{rep}_sorted.markdup.bam'
+#	output:
+#		'results/ATAC_{rep}_sorted.filtered.bam'
+#	threads: 8
+#	conda:
+#		'envs/samtools_env.yml'
+#	shell:
+#		'''
+#		samtools view -h -b -f 2 -F 1548 -q 30 {input} | samtools sort -o {output}
+#		'''
 
 rule samtools_idx:
 	input:
@@ -233,7 +263,7 @@ rule bamCoverage:
 
 rule call_peak:
 	input:
-		'results/ATAC_{rep}_shifted_sorted.bam'
+		'results/ATAC_{rep}.shifted.bam'
 	output:
 		'results/macs3_peaks/ATAC_{rep}_peaks.narrowPeak'
 	conda:
