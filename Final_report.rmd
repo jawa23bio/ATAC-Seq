@@ -88,7 +88,7 @@ output:
     
   Gene Enrichment Results:
         ![](/projectnb/bf528/students/jawa/bf528-individual-project-jawa23bio/results/Top Gene Enrichments.png)
-        For more detailed results: /projectnb/bf528/students/jawa/bf528-individual-project-jawa23bio/results/enrichment/geneOntology.html
+        For more detailed results: check out the `geneOntology.html` file in enrichment subdirectory inside results directory.
 
     Motif Analysis:
         Based on the provided top motif results, we can see a lot of transcription factors (TFs) and their binding motifs that are potentially enriched or relevant in the dataset or condition being studied.
@@ -115,7 +115,7 @@ output:
 
   Motif Analysis:
         ![](/projectnb/bf528/students/jawa/bf528-individual-project-jawa23bio/results/meme_out/Top Results Motif.png)
-        For more detailed results: /projectnb/bf528/students/jawa/bf528-individual-project-jawa23bio/results/meme_out/meme-chip.html
+        For more detailed results, check out the `meme-chip.html` file in meme_out subdirectory inside results directory.
 
 **What can chromatin accessibility let us infer biologically?**
 
