@@ -49,7 +49,8 @@ output:
     + ATAC_filtered     +      30974        +
     +++++++++++++++++++++++++++++++++++++++++
     
-    I determined reproducible peaks by intersecting peak calls from two replicates using the `bedtools intersect` command. Peaks that overlapped between the two sets were considered reproducible, indicating consistency in peak calling
+    I determined reproducible peaks by intersecting peak calls from two replicates using the `bedtools intersect` command. Peaks that overlapped between the two sets were considered reproducible, indicating consistency in peak calling.
+    The intersected peak file post blacklist filtering is referred here as `ATAC_filtered.narrowPeak` and is placed under the results directory. 
 
 **Signal Coverage Plot:**
     
