@@ -1,10 +1,9 @@
 # ATACseq
 
 ## Methods
+ATAC-seq samples, consisting of two replicates from a human source, were subjected to a comprehensive analysis pipeline. The analysis commenced with quality control (QC) and adapter trimming using FastQC (v0.12.0) and Trimmomatic (v0.39), respectively. The reads were then aligned to the human reference genome (hg38) using Bowtie2 (v2.5.3), with the -X 2000 flag utilized to optimize alignment efficiency. To ensure data integrity, alignments to the mitochondrial chromosome were filtered out using SAMtools (v1.19.2). Additionally, to mitigate bias introduced during the tagmentation process, a read-shifting step was performed using deeptools (v3.5.6). Following read processing, fragment size distributions were assessed using ATACSeqQC using the `atacseqqc.R` script for quality control evaluation. Peak calling was conducted separately for each replicate using MACS3 (v3.0.1) with default parameters tailored for ATAC-seq data. To generate a set of reproducible peaks, peaks called from individual replicates were intersected using the intersect function in bedtools (v2.31.1). Furthermore, peaks falling within blacklisted regions were filtered out to enhance the reliability of the dataset. Peak annotation was performed using HOMER (v4.11) to associate peaks with nearby genes and genomic features with their proportions being calculated and visualized using the `Unique_proportions.R` script. Motif analysis was conducted on the reproducible peaks using MEME Suite (v5.5.5) to identify enriched sequence motifs. Lastly, signal coverage plots centered on the transcription start site (TSS) were generated for nucleosome-free regions (NFR) and nucleosome-bound regions (NBR) with PlotProfile from deeptools.
 
-ATACseq samples, comprising two replicates from a human source, were obtained for analysis. The dataset lacks a control, which is typical for ATACseq experiments. The analysis pipeline was initiated with quality control (QC) and adapter trimming, employing FastQC (v0.12.0) and Trimmomatic (v0.39) respectively. Subsequently, reads were aligned to the human reference genome (hg38) using Bowtie2 (v2.5.3) with the -X 2000 flag to facilitate efficient alignment. Alignments to the mitochondrial chromosome were removed using SAMtools (v1.19.2). To mitigate bias induced by the tagmentation process, reads were subjected to read shifting using the `alignmentSieve` function in deeptools (v3.5.6). Following read processing, fragment size distributions were analyzed using ATACSeqQC (v1.26.0) for quality control assessment. Peak calling was performed utilizing MACS3 (v3.0.1) with default parameters for ATACseq for each replicate and a single set of reproducible peaks was generated using the `intersect` function in bedtools (v.2.31.1). Peaks falling within blacklisted regions were filtered out to enhance data reliability. Peak annotation was conducted using HOMER (v4.11) to associate peaks with nearby genes and genomic features. Motif analysis on reproducible peaks was executed using MEME Suite (v5.5.5). Signal coverage plots centered on the transcription start site (TSS) for nucleosome-free regions (NFR) and nucleosome-bound regions (NBR) were generated using PlotProfile. Furthermore, visualization of peaks was facilitated using Integrative Genomics Viewer (IGV) for confirmation and exploration of the identified genomic regions.
-
-## Questions to Address
+## Questions to Address - Addressed in the `Final Report.Rmd` file
 Briefly remark on the quality of the sequencing reads and the alignment statistics, make sure to specifically mention the following:
   - Are there any concerning aspects of the quality control of your sequencing reads?
   - Are there any concerning aspects of the quality control related to alignment?
@@ -43,3 +42,11 @@ After performing motif analysis and gene enrichment on the peak annotations, ple
     - Create a single table / figure with the most interesting results
 
 8. Produce a figure that displays the proportions of regions that appear to have accessible chromatin called as a peak (Promoter, Intergenic, Intron, Exon, TTS, etc.)
+
+## References
+1. [https://github.com/CebolaLab/ATAC-seq](https://github.com/CebolaLab/ATAC-seq?tab=readme-ov-file)
+2. https://github.com/BioinfGuru/memeMotifs?tab=readme-ov-file
+3. http://barcwiki.wi.mit.edu/wiki/SOPs/atac_Seq
+4. https://bioconductor.org/packages/devel/bioc/vignettes/ATACseqQC/inst/doc/ATACseqQC.html#Introduction
+5. https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html
+6. Yan, F., Powell, D. R., Curtis, D. J., & Wong, N. C. (2020, April 1). From reads to insight: A hitchhiker’s guide to ATAC-Seq Data Analysis. Monash University. https://research.monash.edu/en/publications/from-reads-to-insight-a-hitchhikers-guide-to-atac-seq-data-analys 
