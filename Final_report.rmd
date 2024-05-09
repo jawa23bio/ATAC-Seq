@@ -5,6 +5,17 @@ output:
   pdf_document: default
 ---
 
+**Methods**
+
+ATAC-seq samples, comprising two replicates sourced from a human origin, underwent a meticulous analysis pipeline to elucidate chromatin accessibility patterns. The workflow began with quality assessment and adapter trimming utilizing FastQC (v0.12.0) and Trimmomatic (v0.39), respectively, ensuring the integrity of subsequent analyses. Reads were aligned to the human reference genome (hg38) employing Bowtie2 (v2.5.3), leveraging the -X 2000 flag for optimal alignment efficiency. To maintain data fidelity, mitochondrial chromosome alignments were filtered out using SAMtools (v1.19.2). Addressing potential bias introduced during tagmentation, a read-shifting step was executed using the alignmentSieve function from deeptools (v3.5.6). Following read processing, fragment size distributions were evaluated with ATACSeqQC to assess data quality, facilitated by the `atacseqqc.R` script. Peak calling was performed independently for each replicate using MACS3 (v3.0.1), tailored with default parameters for ATAC-seq data analysis.
+
+To generate a set of reproducible peaks, peaks identified from individual replicates were intersected using bedtools (v2.31.1). Furthermore, peaks overlapping with blacklisted regions were filtered out to enhance dataset reliability. Peak annotation was carried out using HOMER (v4.11) to associate peaks with nearby genomic features and genes. The proportion of peaks falling within distinct genomic regions, including promoters, intergenic regions, introns, exons, and transcription termination sites (TTS), was computed and visualized using custom scripts.
+
+Motif analysis on reproducible peaks was conducted using MEME Suite (v5.5.5) to identify enriched sequence motifs associated with chromatin accessibility. Signal coverage plots, centered on the transcription start site (TSS), were generated for nucleosome-free regions (NFR) and nucleosome-bound regions (NBR) using PlotProfile. Additionally, nucleosome occupancy was assessed by calculating the proportions of reads aligning to NFR and NBR regions, visualized through bigWig files generated with deeptools.
+
+In parallel, functional enrichment analysis was performed to elucidate biological processes associated with identified peaks. Gene Ontology (GO) enrichment analysis was conducted using HOMER (v4.11) to reveal biological pathways enriched among genes proximal to accessible chromatin regions. Furthermore, motif enrichment analysis was performed using MEME Suite (v5.5.5) to identify overrepresented DNA sequence motifs within accessible chromatin regions, providing insights into potential transcription factor binding sites underlying chromatin accessibility.
+
+
 **Briefly remark on the quality of the sequencing reads and the alignment statistics, make sure to specifically mention the following:
     Are there any concerning aspects of the quality control of your sequencing reads?
     Are there any concerning aspects of the quality control related to alignment?
